@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +25,43 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <NavigationMenu className="max-w-full m-4 px-16 flex flex-row justify-between items-center">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink href="https://vercel.com/templates">
+                MealMap
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+          {/* Middle navigation list with spacing */}
+          <NavigationMenuList className="flex flex-row gap-x-12"> {/* Adjusted spacing class here */}
+            <NavigationMenuItem>
+              <NavigationMenuLink href="https://nextjs.org/docs">
+                Home
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink href="https://nextjs.org/learn">
+                Categories
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink href="https://vercel.com/templates">
+                Trending
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink href="https://vercel.com/templates">
+                Trending
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+        {children}
+      </body>
     </html>
   );
 }

@@ -62,7 +62,7 @@ const config: Config = {
 			footer: '#EBD9B4',
 			secondarybg:'#638889',
 			greenbg:'#9DBC98',
-			
+			globalbackground:'#F9EFDB',
   		}
   	}
   },

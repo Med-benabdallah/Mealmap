@@ -1,0 +1,255 @@
+'use client';
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table"
+  import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+export default function Recipes() {
+  const [ingredients, setIngredients] = useState([]);
+  const [currentIngredient, setCurrentIngredient] = useState("");
+
+  const [instructions, setInstructions] = useState([]);
+  const [currentInstruction, setCurrentInstruction] = useState("");
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Function to handle image selection and preview
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  // Function to add ingredient
+  const addIngredient = (e) => {
+    e.preventDefault();
+    if (currentIngredient.trim()) {
+      setIngredients([...ingredients, currentIngredient]);
+      setCurrentIngredient("");
+    }
+  };
+
+  // Function to remove ingredient
+  const removeIngredient = (indexToRemove) => {
+    setIngredients(ingredients.filter((_, index) => index !== indexToRemove));
+  };
+
+  // Function to add instruction
+  const addInstruction = (e) => {
+    e.preventDefault();
+    if (currentInstruction.trim()) {
+      setInstructions([...instructions, currentInstruction]);
+      setCurrentInstruction("");
+    }
+  };
+
+  // Function to remove instruction
+  const removeInstruction = (indexToRemove) => {
+    setInstructions(instructions.filter((_, index) => index !== indexToRemove));
+  };
+
+  // Function to handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent the default form submission
+
+    // Validation: Ensure at least one ingredient and one instruction
+    if (ingredients.length === 0 || instructions.length === 0) {
+      alert("Please add at least one ingredient and one instruction.");
+      return;
+    }
+
+    setIsSubmitting(true); // Show loading spinner
+
+    // Simulate form submission (Replace this with API call or form handling logic)
+    setTimeout(() => {
+      setIsSubmitting(false); // Hide loading spinner
+
+      // Example: Show a success message
+      alert("Recipe submitted successfully!");
+
+      // Clear form after successful submission
+      setIngredients([]);
+      setInstructions([]);
+      setSelectedImage(null);
+      setImagePreview(null);
+    }, 2000);
+  };
+
+  return (
+    <div className="flex flex-col justify-center items-center m-10">
+      <div className="w-full max-w-2xl">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-center text-2xl font-semibold">Add New Recipe</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Name Section */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="name" className="font-medium">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  placeholder="Enter recipe name"
+                  className="w-full h-10 px-4 border border-gray-300 rounded-md focus:outline-none focus:border-primary"
+                  required
+                />
+              </div>
+
+              {/* Ingredients Section */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="ingredients" className="font-medium">Ingredients</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    name="ingredients"
+                    id="ingredients"
+                    value={currentIngredient}
+                    onChange={(e) => setCurrentIngredient(e.target.value)}
+                    placeholder="Enter ingredient"
+                    className="w-full h-10 px-4 border border-gray-300 rounded-md focus:outline-none focus:border-primary"
+                  />
+                  <button
+                    className="bg-primary text-white px-4 rounded-md hover:bg-primary-dark transition"
+                    onClick={addIngredient}
+                    disabled={!currentIngredient.trim()}
+                  >
+                    Add
+                  </button>
+                </div>
+                <ul className="mt-2 list-disc list-inside space-y-1">
+                  {ingredients.map((ingredient, index) => (
+                    <li key={index} className="flex justify-between">
+                      {ingredient}
+                      <button
+                        className="text-red-500 ml-2 text-sm"
+                        onClick={() => removeIngredient(index)}
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Instructions Section */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="instructions" className="font-medium">Instructions</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    name="instructions"
+                    id="instructions"
+                    value={currentInstruction}
+                    onChange={(e) => setCurrentInstruction(e.target.value)}
+                    placeholder="Enter instruction"
+                    className="w-full h-10 px-4 border border-gray-300 rounded-md focus:outline-none focus:border-primary"
+                  />
+                  <button
+                    className="bg-primary text-white px-4 rounded-md hover:bg-primary-dark transition"
+                    onClick={addInstruction}
+                    disabled={!currentInstruction.trim()}
+                  >
+                    Add
+                  </button>
+                </div>
+                <ol className="mt-2 list-decimal list-inside space-y-1">
+                  {instructions.map((instruction, index) => (
+                    <li key={index} className="flex justify-between">
+                      {instruction}
+                      <button
+                        className="text-red-500 ml-2 text-sm"
+                        onClick={() => removeInstruction(index)}
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              {/* Image Upload Section */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="image" className="font-medium">Upload Image</label>
+                <input
+                  type="file"
+                  name="image"
+                  id="image"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                />
+                {imagePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-32 h-32 object-cover rounded-full"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <div>
+                <button
+                  className="bg-primary text-white w-full h-12 rounded-md hover:bg-primary-dark transition disabled:bg-gray-300"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Recipe"}
+                </button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="w-2/3">
+        <Table className="mt-10 ">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead>Image</TableHead>
+              <TableHead>FullName</TableHead>
+              <TableHead className="text-right">Modify</TableHead>
+              <TableHead className="text-right">Delete</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="font-medium">11</TableCell>
+              <TableCell>
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </TableCell>
+              <TableCell>Khalil ltaief</TableCell>
+              <TableCell className="text-right">Modify button</TableCell>
+              <TableCell className="text-right">Delete button</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}

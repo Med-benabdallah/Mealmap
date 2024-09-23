@@ -7,7 +7,8 @@ import CategoryList from "@/components/custom/CategoryList";
 import EmailForum from "@/components/custom/EmailForum";
 import Card from "@/components/custom/Card";
 import Link from 'next/link';
-
+import HomeNav from "@/components/custom/HomeNav";
+import Footer from "@/components/custom/Footer";
 export default function Home() {
   const [visibleCards, setVisibleCards] = useState(8); 
   const handleLoadMore = () => {
@@ -16,6 +17,7 @@ export default function Home() {
   const cardItems = Array.from({ length: 20 }); 
   return (
     <div>
+      <HomeNav/>
       <div className="w-full flex flex-col justify-center items-center">
         <div className="w-full flex flex-col justify-center items-center">
           <Hero></Hero>
@@ -63,6 +65,7 @@ export default function Home() {
           </button>
         )}
       </div>
+        <Footer/>
     </div>
   );
 }

@@ -4,6 +4,8 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import cheeseCake from '../../../public/images/cheese_cake.jpg'
+import HomeNav from '@/components/custom/HomeNav';
+import Footer from '@/components/custom/Footer';
 
 export default function Recipe() {
   // Initialize state for the ingredients checkboxes
@@ -37,6 +39,7 @@ export default function Recipe() {
   };
 
   return (
+    <div><HomeNav/>
     <div className='w-screen flex flex-col justify-center items-center'>
       <div className='w-3/5 flex flex-row justify-center items-center border-b-2 border-zinc-500 my-10'>
         <div className='w-3/4'>
@@ -86,6 +89,8 @@ export default function Recipe() {
           <p>Preheat oven to 350°F. Mix flour, sugar, milk, and butter in a bowl. Pour the mixture into a baking pan and bake for 30 minutes.</p>
         </div>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 }

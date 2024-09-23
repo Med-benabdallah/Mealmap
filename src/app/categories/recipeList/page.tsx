@@ -2,6 +2,8 @@
 import React,{ useState } from 'react'
 import Card from '@/components/custom/Card';
 import Link from 'next/link';
+import HomeNav from '@/components/custom/HomeNav';
+import Footer from '@/components/custom/Footer';
 
 export default function RecipeList() {
   const [visibleCards, setVisibleCards] = useState(10); 
@@ -11,6 +13,7 @@ export default function RecipeList() {
   const cardItems = Array.from({ length: 40 }); 
   return (
     
+    <div><HomeNav/>
     <div className='w-screen flex flex-col justify-center items-center'>
     <div className='w-4/5'><h1 className='text-2xl font-bold my-8 border-b-2 border-zinc-400'>Categorie name</h1></div>
     <div className='flex flex-row flex-wrap gap-5 justify-center items-center'>
@@ -29,6 +32,8 @@ export default function RecipeList() {
         )}      
     </div>
     
+  </div>
+  <Footer/>
   </div>
   )
 }

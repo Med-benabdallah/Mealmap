@@ -81,9 +81,6 @@
   font-size: 1.75rem;
 }
 
-body {
-   background-color: #F9EFDB; /* Set your desired background color */
-}
 @layer base {
   * {
     @apply border-border;

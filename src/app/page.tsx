@@ -1,71 +1,78 @@
 "use client";
 
-import React, { useState } from 'react';
-import Hero from "@/components/custom/Hero";
-import RecipeCarousel from "@/components/custom/RecipeCarousel";
-import CategoryList from "@/components/custom/CategoryList";
-import EmailForum from "@/components/custom/EmailForum";
+import React, { useState } from "react";
+
+import Link from "next/link";
+
 import Card from "@/components/custom/Card";
-import Link from 'next/link';
-import HomeNav from "@/components/custom/HomeNav";
+import CategoryList from "@/components/custom/CategoryList";
+import EmailForm from "@/components/custom/EmailForm";
 import Footer from "@/components/custom/Footer";
+import Hero from "@/components/custom/Hero";
+import HomeNav from "@/components/custom/HomeNav";
+import RecipeCarousel from "@/components/custom/RecipeCarousel";
+
 export default function Home() {
-  const [visibleCards, setVisibleCards] = useState(8); 
+  const [visibleCards, setVisibleCards] = useState(8);
   const handleLoadMore = () => {
     setVisibleCards((prevCount) => Math.min(prevCount + 8, 16));
   };
-  const cardItems = Array.from({ length: 20 }); 
+  const cardItems = Array.from({ length: 20 });
   return (
     <div>
-      <HomeNav/>
-      <div className="w-full flex flex-col justify-center items-center">
-        <div className="w-full flex flex-col justify-center items-center">
+      <HomeNav />
+      <div className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center">
           <Hero></Hero>
         </div>
-        <div className="w-4/5 ">
-          <h1 className="text-2xl font-bold my-8 ">Top 5 dishes of the week</h1>
+        <div className="w-4/5">
+          <h1 className="my-8 text-2xl font-bold">Top 5 dishes of the week</h1>
         </div>
-        <div className="w-full flex flex-col justify-center items-center">
+        <div className="flex w-full flex-col items-center justify-center">
           <RecipeCarousel></RecipeCarousel>
         </div>
-        <div className="w-4/5 ">
-          <h1 className="text-2xl font-bold my-8 ">Top 5 sweets of the week</h1>
+        <div className="w-4/5">
+          <h1 className="my-8 text-2xl font-bold">Top 5 sweets of the week</h1>
         </div>
-        <div className="w-full flex flex-col justify-center items-center">
+        <div className="flex w-full flex-col items-center justify-center">
           <RecipeCarousel></RecipeCarousel>
         </div>
-        <div className="w-4/5 ">
-          <h1 className="text-2xl font-bold my-8 ">Popular categories</h1>
+        <div className="w-4/5">
+          <h1 className="my-8 text-2xl font-bold">Popular categories</h1>
         </div>
-        <div className="flex flex-row flex-wrap gap-5 justify-center items-center">
-          <Link href="./categories/recipeList" ><CategoryList></CategoryList></Link>
+        <div className="flex flex-row flex-wrap items-center justify-center gap-5">
+          <Link href="./categories/recipeList">
+            <CategoryList></CategoryList>
+          </Link>
           <CategoryList></CategoryList>
           <CategoryList></CategoryList>
           <CategoryList></CategoryList>
           <CategoryList></CategoryList>
           <CategoryList></CategoryList>
         </div>
-        <div>
-          <EmailForum></EmailForum>
+
+        <EmailForm />
+
+        <div className="mb-4 w-4/5">
+          <h1 className="my-8 text-2xl font-bold">Latest recipes</h1>
         </div>
-        <div className="w-4/5 mb-4">
-          <h1 className="text-2xl font-bold my-8 ">Latest recipes</h1>
-        </div>
-        <div className="flex flex-row flex-wrap gap-5 justify-center items-center ">
+        <div className="flex flex-row flex-wrap items-center justify-center gap-5">
           {cardItems.slice(0, visibleCards).map((_, index) => (
-            <Link href="./recipe" key={index}><Card ></Card></Link>
+            <Link href="./recipe" key={index}>
+              <Card></Card>
+            </Link>
           ))}
         </div>
         {visibleCards < 16 && (
           <button
-            className="mt-6 bg-greenbg text-white py-2 px-4 rounded"
+            className="mt-6 rounded bg-greenbg px-4 py-2 text-white"
             onClick={handleLoadMore}
           >
             Load More
           </button>
         )}
       </div>
-        <Footer/>
+      <Footer />
     </div>
   );
 }

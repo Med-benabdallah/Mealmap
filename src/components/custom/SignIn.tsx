@@ -1,17 +1,21 @@
-
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 function SignIn() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="bg-greenbg text-white py-2 px-4 rounded">Sign In</Button>
+        <Button
+          variant="outline"
+          className="rounded bg-greenbg px-4 py-2 text-white"
+        >
+          Sign In
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] ">
+      <DialogContent className="sm:max-w-[500px]">
         <Tabs defaultValue="login" className="w-full">
           <TabsList className="border-b">
             <TabsTrigger value="login">Login</TabsTrigger>
@@ -50,6 +54,6 @@ function SignIn() {
         </Tabs>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-export default SignIn
+export default SignIn;

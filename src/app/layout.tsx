@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
 import { Inter, Pattaya } from "next/font/google";
+
 import "./globals.css";
 
+import { Toaster } from "sonner";
+
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
-const pattaya = Pattaya({ subsets: ["latin"], weight: "400" });
+
+const pattaya = Pattaya({
+  subsets: ["latin"],
+  variable: "--font-pattaya",
+  weight: "400",
+});
 
 export const metadata: Metadata = {
   title: "MealMap",
@@ -19,17 +28,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={inter.className}
-        style={{
-          backgroundColor: "#F9EFDB",
-          height: "screen",
-        }}
+        className={cn(
+          inter.className,
+          pattaya.variable,
+          "min-h-screen bg-[#F9EFDB]",
+        )}
       >
-       
-
         {children}
-
-
+        <Toaster richColors />
       </body>
     </html>
   );

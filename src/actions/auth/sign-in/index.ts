@@ -22,10 +22,10 @@ export async function login(values: SignInFormValues) {
       return { error: "Invalid credentials!" };
     }
 
-    let defaultRedirectUrl = "/dashboard";
+    let defaultRedirectUrl = "/home";
 
     if (existingUser.role === Role.ADMIN) {
-      defaultRedirectUrl = "/admin/dashboard";
+      defaultRedirectUrl = "/dashboard";
     }
 
     try {
@@ -48,7 +48,7 @@ export async function login(values: SignInFormValues) {
 
       throw error;
     }
-  } catch (error) {
+} catch (error) {
     console.error(error);
     return { error: "Something went wrong!" };
   }

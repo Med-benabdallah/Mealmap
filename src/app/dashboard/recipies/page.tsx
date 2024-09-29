@@ -15,28 +15,29 @@ import {
 } from "@/components/ui/table";
 
 export default function Recipes() {
-  const [ingredients, setIngredients] = useState([]);
+  const [ingredients, setIngredients] = useState<string[]>([]);
   const [currentIngredient, setCurrentIngredient] = useState("");
 
-  const [instructions, setInstructions] = useState([]);
+  const [instructions, setInstructions] = useState<string[]>([]);
   const [currentInstruction, setCurrentInstruction] = useState("");
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<FileList | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Function to handle image selection and preview
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedImage(file);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      const file = files[0];
+      setSelectedImage(files);
       setImagePreview(URL.createObjectURL(file));
     }
   };
 
   // Function to add ingredient
-  const addIngredient = (e) => {
+  const addIngredient = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (currentIngredient.trim()) {
       setIngredients([...ingredients, currentIngredient]);
@@ -45,12 +46,12 @@ export default function Recipes() {
   };
 
   // Function to remove ingredient
-  const removeIngredient = (indexToRemove) => {
+  const removeIngredient = (indexToRemove: number) => {
     setIngredients(ingredients.filter((_, index) => index !== indexToRemove));
   };
 
   // Function to add instruction
-  const addInstruction = (e) => {
+  const addInstruction = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (currentInstruction.trim()) {
       setInstructions([...instructions, currentInstruction]);
@@ -59,12 +60,12 @@ export default function Recipes() {
   };
 
   // Function to remove instruction
-  const removeInstruction = (indexToRemove) => {
+  const removeInstruction = (indexToRemove : number) => {
     setInstructions(instructions.filter((_, index) => index !== indexToRemove));
   };
 
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent the default form submission
 
     // Validation: Ensure at least one ingredient and one instruction
@@ -171,7 +172,7 @@ export default function Recipes() {
                   />
                   <button
                     className="hover:bg-primary-dark rounded-md bg-primary px-4 text-white transition"
-                    onClick={addInstruction}
+                    type="submit"
                     disabled={!currentInstruction.trim()}
                   >
                     Add

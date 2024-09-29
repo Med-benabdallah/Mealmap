@@ -13,13 +13,13 @@ enum Role {
 }
 
 model User {
-  id              String       @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  email           String       @unique
-  emailVerified   DateTime?
-  image           String?
-  password        String
-  role            Role         @default(USER)
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String
+  role          Role      @default(USER)
 
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -27,21 +27,30 @@ model User {
 }
 
 model Recipie {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
   name          String
-  ingrediants   String[]
+  ingredients   String[]
   instructions  String[]
-  categories    Category[]   @relation(fields: [categoryId], references: [id])
-  categoryId    String[]     @db.ObjectId
-  recipieBook   RecipieBook? @relation(fields: [recipieBookId], references: [id])
-  recipieBookId String?      @db.ObjectId
+  image         String
+  categories    RecipieCategory[] // Relation with join model
+  recipieBook   RecipieBook?      @relation(fields: [recipieBookId], references: [id])
+  recipieBookId String?           @db.ObjectId
 }
 
 model Category {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  recipies  Recipie[] @relation(fields: [recipieId], references: [id])
-  recipieId String[]  @db.ObjectId
+  id       String            @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  image    String
+  recipies RecipieCategory[]// Relation with join model
+}
+
+model RecipieCategory {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  recipieId  String @db.ObjectId
+  categoryId String @db.ObjectId
+
+  recipie  Recipie  @relation(fields: [recipieId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
 }
 
 model RecipieBook {

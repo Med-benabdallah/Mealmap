@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getTotalUsers } from "@/actions/admin";
+import { getTotalUsers } from "@/actions/admin/global";
 
 import {
   Card,
@@ -19,6 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getTotalCatgories } from "@/actions/admin/global";
+import { getTotalRecipes } from "@/actions/admin/global";
 
 export default async function dashboard() {
   const totalUsers = await getTotalUsers();
@@ -46,11 +48,11 @@ export default async function dashboard() {
             <CardHeader>
               <CardTitle>Total Categories</CardTitle>
               <CardDescription>
-                this is the total number of users{" "}
+                this is the total number of Categories{" "}
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">4552</p>
+              <p className="text-2xl font-bold">{getTotalCatgories.length}</p>
             </CardContent>
             <CardFooter>
               <p>Today&apos;s new users -&gt; +25</p>
@@ -66,23 +68,7 @@ export default async function dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">4552</p>
-            </CardContent>
-            <CardFooter>
-              <p>Today&apos;s new users -&gt; +25</p>
-            </CardFooter>
-          </Card>
-        </div>
-        <div className="">
-          <Card>
-            <CardHeader>
-              <CardTitle>Total visitors</CardTitle>
-              <CardDescription>
-                this is the total number of users{" "}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold">4552</p>
+              <p className="text-2xl font-bold">{getTotalRecipes.length}</p>
             </CardContent>
             <CardFooter>
               <p>Today&apos;s new users -&gt; +25</p>

@@ -1,5 +1,7 @@
 import React from "react";
 
+import { getTotalUsers } from "@/actions/admin";
+
 import {
   Card,
   CardContent,
@@ -18,7 +20,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export default function dashboard() {
+export default async function dashboard() {
+  const totalUsers = await getTotalUsers();
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <div className="my-10 mt-4 flex h-full w-full items-center justify-center gap-4 max-sm:flex-col sm:flex-row">
@@ -31,7 +34,7 @@ export default function dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">4552</p>
+              <p className="text-2xl font-bold">{totalUsers.length}</p>
             </CardContent>
             <CardFooter>
               <p>Today&apos;s new users -&gt; +25</p>

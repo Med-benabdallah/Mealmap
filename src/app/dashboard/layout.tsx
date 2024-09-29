@@ -14,7 +14,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { authorized } = await requireAuth(Role.USER);
+  const { authorized } = await requireAuth(Role.ADMIN);
 
   if (!authorized)
     return (

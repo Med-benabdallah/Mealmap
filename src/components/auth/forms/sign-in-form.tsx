@@ -43,16 +43,13 @@ export function SignInForm() {
           if (response.error) {
             return response.error;
           }
+          router.push(response.redirect?.toString() || "/");
           signInForm.reset();
           setRedirect(response.redirect);
+
           return "Signed in successfully!";
         },
         error: (err) => err.message || "Something went wrong.",
-        finally: () => {
-          setTimeout(() => {
-            router.push(redirect || "/dashboard");
-          }, 2000);
-        },
       });
     });
   };

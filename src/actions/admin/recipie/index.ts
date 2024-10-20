@@ -1,9 +1,15 @@
 "use server";
 
-import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-export async function addRecipie(name: string, image: string, instructions: string[], ingredients: string[]) { 
+import { db } from "@/lib/db";
+
+export async function addRecipie(
+  name: string,
+  image: string,
+  instructions: string[],
+  ingredients: string[],
+) {
   try {
     const recipie = await db.recipie.create({
       data: {
@@ -44,13 +50,13 @@ export async function removeFromFavorites(recipeId: string, userId: string) {
   });
 }
 
-  export async function getRandomRecipe() {
-    const allRecipes = await db.recipie.findMany(); // Adjust to your database access method
-    if (allRecipes.length === 0) return null; // Return null if no recipes are found
+export async function getRandomRecipe() {
+  const allRecipes = await db.recipie.findMany(); // Adjust to your database access method
+  if (allRecipes.length === 0) return null; // Return null if no recipes are found
 
-    const randomIndex = Math.floor(Math.random() * allRecipes.length); // Generate random index
-    return allRecipes[randomIndex]; // Return a random recipe
-  }
+  const randomIndex = Math.floor(Math.random() * allRecipes.length); // Generate random index
+  return allRecipes[randomIndex]; // Return a random recipe
+}
 
 export async function getFavoriteRecipes(userId: string) {
   const recipeBook = await db.recipieBook.findUnique({
@@ -87,7 +93,7 @@ export async function deleteRecipie(recipieId: string) {
 // Assuming this is located in a file like: actions/admin/recipie.ts
 // Example: actions/admin/recipie.ts
 
-interface Recipe{
+interface Recipe {
   id: string;
   name: string;
   image: string | null;
@@ -96,19 +102,27 @@ interface Recipe{
 } // Adjust the import path as necessary
 
 export async function getRecipeById(id: string): Promise<Recipe | null> {
-  const response = await fetch(`/api/recipe/${id}`);
-  if (!response.ok) {
-    const errorText = await response.text(); // Capture error details
-    console.error("Fetch error:", response.status, errorText);
-    throw new Error(`Failed to fetch recipe: ${response.status} - ${errorText}`);
+  try {
+    const recipe = await db.recipie.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    return recipe;
+  } catch (error) {
+    console.error("Error fetching recipe:", error);
+    throw error;
   }
-  return await response.json(); // Ensure this returns the correct data structure
 }
 
-
-
-
-export async function updateRecipie(recipieId: string, name: string, image: string, instructions: string[], ingredients: string[]) {
+export async function updateRecipie(
+  recipieId: string,
+  name: string,
+  image: string,
+  instructions: string[],
+  ingredients: string[],
+) {
   try {
     const recipie = await db.recipie.update({
       where: {
@@ -119,7 +133,7 @@ export async function updateRecipie(recipieId: string, name: string, image: stri
         image: image,
         instructions: instructions,
         ingredients: ingredients,
-      }
+      },
     });
     return recipie;
   } catch (error) {

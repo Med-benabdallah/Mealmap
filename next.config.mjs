@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: "utfs.io",
         pathname: "/**", // Allow all paths under utfs.io
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**", // Allow all paths under images.unsplash.com
+      },
     ],
   },
 };

@@ -4,12 +4,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { name, ingrediants, instructions, categoryId } = req.body;
+    const { name, ingredients, instructions, categoryId } = req.body;
     try {
       const newRecipie = await db.recipie.create({
         data: {
           name,
-          ingrediants,
+          ingredients,
           instructions,
           categories: { connect: { id: categoryId } },
         },

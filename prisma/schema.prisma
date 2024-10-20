@@ -31,7 +31,7 @@ model Recipie {
   name          String
   ingredients   String[]
   instructions  String[]
-  image         String
+  image         String?
   categories    RecipieCategory[] // Relation with join model
   recipieBook   RecipieBook?      @relation(fields: [recipieBookId], references: [id])
   recipieBookId String?           @db.ObjectId
@@ -40,7 +40,7 @@ model Recipie {
 model Category {
   id       String            @id @default(auto()) @map("_id") @db.ObjectId
   name     String
-  image    String
+  image    String?
   recipies RecipieCategory[]// Relation with join model
 }
 

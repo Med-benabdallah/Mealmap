@@ -24,6 +24,8 @@ import { getTotalRecipes } from "@/actions/admin/global";
 
 export default async function dashboard() {
   const totalUsers = await getTotalUsers();
+  const totalRecipes = await getTotalRecipes();
+  const totalCatgories = await getTotalCatgories();
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <div className="my-10 mt-4 flex h-full w-full items-center justify-center gap-4 max-sm:flex-col sm:flex-row">
@@ -52,7 +54,7 @@ export default async function dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">{getTotalCatgories.length}</p>
+              <p className="text-2xl font-bold">{totalCatgories.length}</p>
             </CardContent>
             <CardFooter>
               <p>Today&apos;s new users -&gt; +25</p>
@@ -68,7 +70,7 @@ export default async function dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">{getTotalRecipes.length}</p>
+              <p className="text-2xl font-bold">{totalRecipes.length}</p>
             </CardContent>
             <CardFooter>
               <p>Today&apos;s new users -&gt; +25</p>

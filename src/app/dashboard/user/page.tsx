@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { getUsers } from "@/actions/admin/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Card,
@@ -19,57 +19,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export default function user() {
+
+export default async function User() {
+  const users = await getUsers();
   return (
     <div className="m-10 flex flex-col items-center justify-center">
-      <div className="w-2/3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Add New User</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form>
-              <div className="flex flex-col gap-4">
-                <div>
-                  <label htmlFor="name">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Enter name"
-                    className="h-10 w-full px-4"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="Enter email"
-                    className="h-10 w-full px-4"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="Enter password"
-                    className="h-10 w-full px-4"
-                  />
-                </div>
-                <div>
-                  <button className="h-10 w-full bg-primary text-white">
-                    Add User
-                  </button>
-                </div>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+     
       <div className="w-2/3">
         <Table className="mt-10">
           <TableHeader>
@@ -82,18 +37,20 @@ export default function user() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">11</TableCell>
-              <TableCell>
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </TableCell>
-              <TableCell>Khalil ltaief</TableCell>
-              <TableCell className="text-right">modify button</TableCell>
-              <TableCell className="text-right">Delete button</TableCell>
-            </TableRow>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell className="font-medium">{user.id}</TableCell>
+                <TableCell>
+                  <Avatar>
+                    <AvatarImage src={user.image || "https://github.com/shadcn.png"} />
+                    <AvatarFallback>{user.name[0]}</AvatarFallback>
+                  </Avatar>
+                </TableCell>
+                <TableCell>{user.name}</TableCell>
+                <TableCell className="text-right">modify button</TableCell>
+                <TableCell className="text-right">Delete button</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>

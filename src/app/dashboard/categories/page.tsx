@@ -1,67 +1,71 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { UploadButton } from "@/utils/uploadthing";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { getCategories, addCategory, deleteCategory } from "@/actions/admin/category";
 
 export default function Categories() {
-  const [isPending, startTransition] = React.useTransition();
-  const [name, setName] = useState("");
-  const [image, setImage] = useState<File | null>(null); // Store file as File object
-  interface Category {
-    id: string;
-    name: string;
-    image: string;
-  }
+  const [categories, setCategories] = useState<any[]>([]);
+  const [categoryName, setCategoryName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  // Fetch categories from the database when the component mounts
   useEffect(() => {
-    const fetchCategories = async () => {
+    async function fetchCategories() {
       try {
-        const response = await fetch("/api/categories");
-        const data = await response.json();
-        setCategories(data);
+        const fetchedCategories = await getCategories();
+        setCategories(fetchedCategories);
       } catch (error) {
         console.error("Error fetching categories:", error);
+        toast.error("Error fetching categories");
       }
-    };
-
+    }
     fetchCategories();
   }, []);
-
-  // Handle file input change
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file); // Store file object
+  const handleDeleteCategory = async (categoryId: string) => {
+    if (window.confirm("Are you sure you want to delete this recipe?")) {
+      try {
+        await deleteCategory(categoryId);
+        setCategories(categories.filter((category
+        ) => category.id !== categoryId));
+        toast.success("Recipe deleted successfully");
+      } catch (error) {
+        toast.error("Failed to delete recipe");
+        console.error("Error deleting recipe:", error);
+      }
     }
   };
 
-  // Handle form submission
-  const onSubmit = async (name: string) => {
-    const formData = new FormData();
-    formData.append("name", name);
-    if (image) {
-      formData.append("image", image); // Append image file
+  const handleAddCategory = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent default form submission
+
+    if (!categoryName || !imageUrl) {
+      toast.error("Please fill in all fields");
+      return;
     }
 
-    startTransition(() => {
-      toast.promise(
-        fetch("/api/categories", {
-          method: "POST",
-          body: formData,
-        }).then((res) => res.json()),
-        {
-          loading: "Creating category...",
-          success: "Category created successfully",
-          error: "Something went wrong.",
-        }
-      );
-    });
+    try {
+      await addCategory(categoryName, imageUrl); // Pass the required arguments
+      toast.success("Category added successfully");
+
+      // Optionally update the categories state without reloading
+      setCategories((prev) => [...prev, { name: categoryName, image: imageUrl }]);
+      setCategoryName(""); // Clear the form
+      setImageUrl(""); // Clear the uploaded image
+    } catch (error) {
+      console.error("Error adding category:", error);
+      toast.error("Error adding category");
+    }
   };
 
   return (
@@ -73,38 +77,42 @@ export default function Categories() {
             <CardTitle>Add New Category</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col gap-4">
-              <div>
-                <label htmlFor="name">Category Name</label>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Enter name"
-                  className="h-10 w-full px-4"
-                />
+            <form onSubmit={handleAddCategory}>
+              <div className="flex flex-col gap-4">
+                <div>
+                  <label htmlFor="name">Category Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Enter name"
+                    className="h-10 w-full px-4"
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)} // Update state
+                  />
+                </div>
+                <div>
+                  <label htmlFor="image">Category Image</label>
+                  <UploadButton
+                    endpoint="imageUploader"
+                    onClientUploadComplete={(res) => {
+                      if (res && res.length > 0) {
+                        setImageUrl(res[0].url); // Update the imageUrl state
+                        toast.success("Upload complete");
+                      }
+                    }}
+                  />
+                </div>
+                <div>
+                  <button
+                    type="submit"
+                    className="h-10 w-full bg-primary text-white"
+                  >
+                    Add Category
+                  </button>
+                </div>
               </div>
-              <div>
-                <label htmlFor="image">Category Image</label>
-                <input
-                  onChange={handleImageChange}
-                  type="file"
-                  name="image"
-                  id="image"
-                  className="h-10 w-full px-4"
-                />
-              </div>
-              <div>
-                <button
-                  className="h-10 w-full bg-primary text-white"
-                  onClick={() => onSubmit(name)}
-                >
-                  Add Category
-                </button>
-              </div>
-            </div>
+            </form>
           </CardContent>
         </Card>
       </div>
@@ -116,7 +124,6 @@ export default function Categories() {
             <TableRow>
               <TableHead>Image</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead className="text-right">Modify</TableHead>
               <TableHead className="text-right">Delete</TableHead>
             </TableRow>
           </TableHeader>
@@ -125,13 +132,23 @@ export default function Categories() {
               <TableRow key={category.id}>
                 <TableCell>
                   <Avatar>
-                    <AvatarImage src={category.image || "/placeholder.png"} />
-                    <AvatarFallback>{category.name[0]}</AvatarFallback>
+                    <AvatarImage src={category.image} />
+                    <AvatarFallback>NA</AvatarFallback>
                   </Avatar>
                 </TableCell>
                 <TableCell>{category.name}</TableCell>
-                <TableCell className="text-right">Modify button</TableCell>
-                <TableCell className="text-right">Delete button</TableCell>
+                <TableCell className="text-right">
+                <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDeleteCategory(category.id);
+                    }}
+                    className="hover:underline"
+                  >
+                    Delete
+                  </a>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

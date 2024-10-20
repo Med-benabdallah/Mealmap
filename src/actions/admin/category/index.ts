@@ -6,7 +6,6 @@ import z from "zod";
 
 
 
-
 export async function addCategory(cat: string, image: string) { 
   try {
     const category = await db.category.create({
@@ -32,4 +31,30 @@ export async function getCategories() {
   }
 }
 
+export async function deleteCategory(categoryId: string) {
+const deleteCategory = await db.category.delete({
+  where: {
+    id: categoryId,
+  },
+});
+}
+
+export async function updateCategory(categoryId: string, cat: string, image: string) {
+  try {
+    const category = await db.category.update({
+      where: {
+        id: categoryId,
+      },
+      data: {
+        name: cat,
+        image:image,
+      }
+
+    });
+    return category;
+  } catch (error) {
+    console.error("Error fetching category:", error);
+    throw error;
+  }
+}
 

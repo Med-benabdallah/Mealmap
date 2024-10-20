@@ -1,7 +1,5 @@
 import React from "react";
-
 import Link from "next/link";
-
 import {
   Carousel,
   CarouselContent,
@@ -12,7 +10,18 @@ import {
 
 import Card from "./Card";
 
-function RecipeCarousel() {
+// Define the Recipe type
+interface Recipe {
+  id: string;
+  name: string;
+  image?: string;
+}
+
+interface RecipeCarouselProps {
+  recipes: Recipe[];
+}
+
+function RecipeCarousel({ recipes }: RecipeCarouselProps) {
   return (
     <div className="my-10 w-4/5">
       <Carousel
@@ -23,14 +32,19 @@ function RecipeCarousel() {
         className="w-full"
       >
         <CarouselContent className="w-full">
-          {Array.from({ length: 5 }).map((_, index) => (
+          {recipes.map((recipe) => ( // Use the passed recipes prop
             <CarouselItem
-              key={index}
+              key={recipe.id} // Use recipe id as the key
               className="flex items-center justify-center md:basis-1/2 lg:basis-1/3"
             >
               <div>
-                <Link href="/recipe">
-                  <Card></Card>
+                <Link href={`/recipe/${recipe.id}`}> {/* Link to specific recipe */}
+                  <Card
+                    recipeId={recipe.id}
+                    name={recipe.name}
+                    image={recipe.image || "/images/fallback.jpg"} // Fallback if no image
+                    isFavorite={false}
+                  />
                 </Link>
               </div>
             </CarouselItem>

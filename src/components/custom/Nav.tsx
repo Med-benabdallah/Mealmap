@@ -1,22 +1,17 @@
 "use client";
 
 import React from "react";
-
 import { Pattaya } from "next/font/google";
-
+import { useSession, signIn, signOut } from "next-auth/react";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -24,7 +19,12 @@ import {
 
 const pattaya = Pattaya({ subsets: ["latin"], weight: "400" });
 
-function nav() {
+function Nav() {
+  const { data: session, status } = useSession();
+
+  console.log("Session Status:", status);
+  console.log("Session Data:", session);
+
   return (
     <div className="">
       <Sheet key="right">
@@ -55,8 +55,6 @@ function nav() {
           </SheetHeader>
           <NavigationMenu className="flex flex-col items-center justify-center">
             <NavigationMenuList className="flex w-full flex-col items-center justify-center gap-y-12">
-              {" "}
-              {/* Adjusted spacing class here */}
               <NavigationMenuItem>
                 <NavigationMenuLink href="/">Home</NavigationMenuLink>
               </NavigationMenuItem>
@@ -94,6 +92,29 @@ function nav() {
                   </span>
                 </NavigationMenuLink>
               </NavigationMenuItem>
+
+              {/* Authentication Section */}
+              <NavigationMenuItem>
+                {status === "loading" ? (
+                  <p>Loading...</p>
+                ) : session ? (
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={session.user?.image || "/images/default-avatar.png"}
+                      alt={session.user?.name || "User"}
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <p>{session.user?.name}</p>
+                    <button onClick={() => signOut()} className="ml-4">
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={() => signIn()} className="login-button">
+                    Login
+                  </button>
+                )}
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </SheetContent>
@@ -102,4 +123,4 @@ function nav() {
   );
 }
 
-export default nav;
+export default Nav;

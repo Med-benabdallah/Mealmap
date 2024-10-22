@@ -11,6 +11,7 @@ import HomeNav from "@/components/custom/HomeNav";
 import RecipeCarousel from "@/components/custom/RecipeCarousel";
 import { getCategories } from "@/actions/admin/category";
 import { getRandomRecipe } from "@/actions/admin/recipie";
+
 interface Recipe {
   id: string;
   name: string;
@@ -18,7 +19,7 @@ interface Recipe {
   ingredients: string[];
   instructions: string[];
   recipieBookId: string | null;
-} // Adjust this path according to your structure
+}
 
 export default function Home() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -58,6 +59,12 @@ export default function Home() {
 
   const handleLoadMore = () => {
     setVisibleCards((prevCount) => Math.min(prevCount + 8, latestRecipe ? 1 : 0));
+  };
+
+  // Function to handle "Add to Favorite" button click
+  const handleAddToFavorite = (recipeId: string) => {
+    // Call your favorite API or handle logic to add to favorite
+    console.log("Added to favorite: ", recipeId);
   };
 
   return (
@@ -104,14 +111,22 @@ export default function Home() {
             <div>Loading latest recipe...</div>
           ) : (
             latestRecipe && (
-              <Link href={`./recipe/${latestRecipe.id}`} key={latestRecipe.id}>
-                <Card
-                  recipeId={latestRecipe.id}
-                  name={latestRecipe.name}
-                  image={latestRecipe.image || "/images/fallback.jpg"}
-                  isFavorite={false}
-                />
-              </Link>
+              <div key={latestRecipe.id}>
+                <Link href={`./recipe/${latestRecipe.id}`}>
+                  <Card
+                    recipeId={latestRecipe.id}
+                    name={latestRecipe.name}
+                    image={latestRecipe.image || "/images/fallback.jpg"}
+                    isFavorite={false}
+                  />
+                </Link>
+                <button
+                  className="mt-2 rounded bg-blue-500 px-4 py-2 text-white"
+                  onClick={() => handleAddToFavorite(latestRecipe.id)}
+                >
+                  Add to Favorite
+                </button>
+              </div>
             )
           )}
         </div>

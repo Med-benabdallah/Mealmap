@@ -1,30 +1,28 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/custom/Card';
 import { getFavoriteRecipes } from '@/actions/admin/recipie';
-import { useSession } from 'next-auth/react'; // To get the authenticated user's session
+import { useSession } from 'next-auth/react';
 
 export default function Trending() {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Array<{ id: string; name: string; ingredients: string[]; instructions: string[]; image: string | null; recipieBookId: string | null }>>([]);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
 
   useEffect(() => {
     async function fetchFavorites() {
-      if (session && session.user) {
+      if (session?.user?.id) {
         try {
-          if (typeof session.user.id === 'string') {
-            const fetchedFavorites = await getFavoriteRecipes(session.user.id); // Fetch favorites for the logged-in user
-            setFavoriteRecipes(fetchedFavorites);
-          } else {
-            console.error('User ID is not a string');
-          }
+          const fetchedFavorites = await getFavoriteRecipes(session.user.id);
+          console.log("Fetched favorites:", fetchedFavorites);
+          setFavoriteRecipes(fetchedFavorites);
         } catch (error) {
           console.error('Failed to fetch favorite recipes:', error);
         } finally {
-          setLoading(false); // Stop loading when the fetch is complete
+          setLoading(false);
         }
       } else {
-        setLoading(false); // Stop loading if no session
+        setLoading(false);
       }
     }
 

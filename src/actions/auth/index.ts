@@ -40,7 +40,7 @@ export async function logout() {
  * @param {string} id
  * @returns {Promise<ExtendedUser | null>}
  */
-export async function getUserById(id: string) {
+export async function getUserById(id: string) { 
   try {
     const user = await db.user.findUnique({
       where: {
